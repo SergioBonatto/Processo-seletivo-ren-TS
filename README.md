@@ -28,6 +28,10 @@ type Ranking = {
     "currency": "string"  // Moeda de referência do ranking: USD, BRL, EUR
 }
 
+type None = {
+  // Explicitly marks that no structured prediction was extracted
+}
+
 type Output = {
     "post_text": "string"
     "target_type": TargetPrice | PercentageChange | Range | Ranking | None,
