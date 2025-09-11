@@ -250,25 +250,25 @@ type Output = {
 
 ---
 
-- **Target type macro F1 ≥ 0.70**  
+- **Target type macro**  
   - O classificador deve identificar corretamente os tipos de previsão (`target_price`, `pct_change`, `range`, `ranking`, `none`) com acurácia balanceada entre todas as categorias.  
-  - F1 combina precisão e recall — 0.70 significa acertar ~7 de cada 10 vezes.  
+  - A Taxa de acerto deve ser ~7 de cada 10 vezes.  
   - *Macro* significa que cada categoria tem peso igual (até as menos comuns como `ranking`).  
 
-- **Extração numérica exact match rate ≥ 0.80**  
+- **Extração numérica**  
   - Para preços e ranges, 80% devem estar **exatamente corretos** (sem tolerância).  
   - Exemplo: `"$50,000"` ≠ `"$50000"`.  
   - Vale tanto para valores únicos quanto para `min/max`.  
 
-- **Normalização de frases de tempo ≥ 0.75**  
+- **Normalização de frases de tempo**  
   - Converter expressões como “fim do Q3” ou “mês que vem” para timestamps UTC com base na data do post.  
   - Acurácia mínima: 75%.  
   - O sistema deve lidar com expressões vagas.  
 
-- **Sentimento Spearman ≥ 0.60**  
+- **Sentimento Spearman**  
   - Escala: -100 (muito bearish) a +100 (muito bullish).  
   - A correlação de Spearman mede se a ordenação dos posts (mais bearish → mais bullish) é próxima da feita por humanos.  
-  - 0.60 = concordância moderada a forte.  
+  - A concordância deve ser > 0.60(concordância moderada a forte).  
 
 
 ---
