@@ -43,33 +43,203 @@ type Output = {
     "notes": "string[]"       // ex.: ["Quarter detectado no contexto", "Retweet atribuído ao autor original"]
 }
 ```
+### Campos obrigatórios do output
+
+- **target_type**: um dos valores **`target_price`**, **`pct_change`**, **`range`**, **`ranking`**, **`none`**.
+  - `target_price`: previsão de preço absoluto (ex: "BTC vai a $100k").  
+  - `pct_change`: previsão em percentual (ex: "ETH vai subir 50%").  
+  - `range`: previsão de faixa de preço (ex: "BTC entre $40k–$60k").  
+  - `ranking`: previsão de posição relativa (ex: "AVAX no top 5").  
+  - `none`: post sem previsão mensurável.  
+
+- **timeframe**: objeto `{ explicit: boolean, start?: string, end?: string }`, com timestamps em **UTC** no formato ISO 8601 (`YYYY-MM-DDTHH:mm:ssZ`).
+  - `explicit`: `true` se o post mencionar prazo claro (ex: “até fim do ano”), senão `false`.  
+  - `start`: timestamp inicial do período considerado.  
+  - `end`: timestamp final do período considerado.  
+
+- **bear_bull**: sentimento inteiro na escala **-100** (muito bearish) a **+100** (muito bullish).
+  - Valores negativos indicam viés pessimista (queda esperada).  
+  - Valores positivos indicam viés otimista (alta esperada).  
+  - Valores próximos de 0 indicam neutralidade ou incerteza.  
+
+- **notes**: lista de strings com **assunções** e decisões de normalização feitas pelo parser.
+  - Exemplo: moeda assumida (`USD`) quando não especificada.  
+  - Conversões de prazos vagos para datas (ex: “Christmas” → `2025-12-25`).  
+  - Observações contextuais (ex: “retweet atribuído ao autor original”).  
+
+
 ---
-## Exemplo de input
+### Exemplos para cada tipo
+
+---
+
+#### 1. TargetPrice Example (Quote Tweet)
+
+**Exemplo de Input**:
+
 ```json
 {
-  "post_text": "BTC breaking $100k before Christmas! Mark my words",
-  "post_created_at": "2022-09-20T14:30:00Z"
+  "post_text": "BTC breaking $80,000 before end of year! 🚀",
+  "post_created_at": "2025-08-25T12:00:00Z"
 }
 ```
-
----
-
-## Exemplo de output
-
+**Exemplo de Output**:
 ```json
 {
-  "post_text": "BTC breaking $100k before Christmas! Mark my words",
   "target_type": "target_price",
-  "bear_bull": 85,
+  "extracted_value": {
+    "asset": "BTC",
+    "price": 80000,
+    "currency": "USD"
+  },
   "timeframe": {
     "explicit": true,
-    "start": "2022-09-20T14:30:00Z",
-    "end": "2022-12-25T23:59:59Z"
+    "start": "2025-08-25T12:00:00Z",
+    "end": "2025-12-31T23:59:59Z"
   },
-  "notes": ["Prazo 'Christmas' convertido para 25 de dezembro", "Moeda assumida: USD"]
+  "bear_bull": 78,
+  "notes": [
+    "End of year converted to December 31st",
+    "Assumed USD currency",
+    "Quote tweet - prediction attributed to @crypto_bull_2024",
+    "Rocket emoji indicates high bullish sentiment"
+  ]
 }
 ```
 
+#### 2. Percentage Change Example
+
+**Exemplo de Input**:
+```json
+{
+  "post_text": "RT @sol_predictions: SOL down 40% from here, bear market incoming 📉",
+  "post_created_at": "2025-08-25T12:00:00Z"
+}
+```
+
+**Exemplo de Output**:
+```json
+{
+  "target_type": "pct_change",
+  "extracted_value": {
+    "asset": "SOL",
+    "percentage": -40,
+    "currency": "USD"
+  },
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "bear_bull": -75,
+  "notes": [
+    "No specific timeframe mentioned",
+    "Retweet - original prediction by @sol_predictions",
+    "Bear market language indicates strong negative sentiment",
+    "Assumed USD currency"
+  ]
+}
+```
+
+#### 3. Range Example (Original Tweet with Image)
+
+**Input Example**:
+```json
+{
+  "post_text": "ETH consolidating between $3,200-$3,800 next month. Chart analysis attached 📊",
+  "post_created_at": "2025-08-25T12:00:00Z"
+}
+```
+
+**Output Example**:
+```json
+{
+  "target_type": "range",
+  "extracted_range": {
+    "asset": "ETH",
+    "min": 3200,
+    "max": 3800,
+    "currency": "USD"
+  },
+  "timeframe": {
+    "explicit": true,
+    "start": "2025-08-25T12:00:00Z",
+    "end": "2025-09-25T23:59:59Z"
+  },
+  "bear_bull": 15,
+  "notes": [
+    "Next month calculated from post date",
+    "Chart analysis image attached - technical analysis basis",
+    "Consolidation suggests neutral-to-slightly-bullish sentiment",
+    "Assumed USD currency"
+  ]
+}
+```
+
+#### 4. Ranking Exmaple
+
+**Input Example**:
+```json
+{
+  "post_text": "Disagree with this take. PEPE will crack top 10 by market cap this cycle, not crash 🐸💎",
+  "post_created_at": "2025-08-25T12:00:00Z"
+}
+```
+
+**Output Example**:
+```json
+{
+  "target_type": "ranking",
+  "extracted_value": {
+    "asset": "PEPE",
+    "ranking": 10,
+    "currency": "USD"
+  },
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "bear_bull": 65,
+  "notes": [
+    "Market cap ranking assumed",
+    "This cycle is vague timeframe",
+    "Quote tweet disagreeing with @bearish_analyst's bearish prediction",
+    "Frog and diamond emojis indicate strong bullish sentiment",
+    "USD market cap ranking context"
+  ]
+}
+```
+
+#### 5. None Example
+
+**Input Example**:
+```json
+{
+  "post_text": "RT @market_news: Crypto market volatility hits new highs this week. This is exactly why I don't make predictions anymore 🤷‍♂️",
+  "post_created_at": "2025-08-25T12:00:00Z"
+}
+```
+**Output Example**:
+```json
+{
+  "target_type": "none",
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "bear_bull": -20,
+  "notes": [
+    "No measurable prediction made",
+    "Retweet with additional commentary by @former_crypto_bull",
+    "General market volatility observation only",
+    "Slight negative sentiment due to uncertainty and anti-prediction stance",
+    "Shrugging emoji indicates resignation/uncertainty"
+  ]
+}
+
+```
 ---
 
 ## Quality Bars (mínimos de aceitação)
