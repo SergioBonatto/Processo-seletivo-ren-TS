@@ -73,10 +73,11 @@ export class CryptoPredictionParser {
     }
 
     try {
+      const modelName = process.env.LLM_MODEL_NAME || 'mistralai/mistral-7b-instruct:free';
       const response = await axios.post(
         this.openRouterUrl,
         {
-          model: 'mistralai/mistral-7b-instruct:free', // A good, free model for starting
+          model: modelName,
           messages: [
             { role: 'system', content: this.systemPrompt },
             {
@@ -98,7 +99,7 @@ export class CryptoPredictionParser {
 
       const content = response.data.choices[0].message.content;
       const parsedJson = JSON.parse(content);
-      
+
       // Ensure the post_text from the original input is preserved
       parsedJson.post_text = input.post_text;
 

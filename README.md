@@ -232,15 +232,22 @@ The architecture consists of three main components:
     ```
 
 3.  **Configure environment variables:**
-    Create a `.env` file at the project root. The parser depends on an OpenRouter API key.
+    Create a `.env` file at the project root. The parser requires an OpenRouter API key and allows you to configure the LLM model used.
 
     ```env
-    # Add your OpenRouter API key here
+    # Add your OpenRouter API key
     OPENROUTER_API_KEY="sk_or_..."
+
+    # LLM model name (optional)
+    # Example: LLM_MODEL_NAME="mistralai/mistral-7b-instruct:free"
+    # If not set, defaults to "mistralai/mistral-7b-instruct:free"
+    LLM_MODEL_NAME="mistralai/mistral-7b-instruct:free"
 
     # Server port (optional, default 3000)
     PORT=3000
     ```
+    - **Modular design:** O parser (`src/parser.ts`) pode ser facilmente adaptado para outros modelos ou regras, pois toda a lógica de extração está isolada e o prompt pode ser ajustado. O nome do modelo LLM pode ser configurado via variável de ambiente `LLM_MODEL_NAME`.
+    - **Modular design:** The parser (`src/parser.ts`) can be easily adapted for other models or rules, as all extraction logic is isolated and the prompt can be adjusted. The LLM model name can be configured via the `LLM_MODEL_NAME` environment variable.
 
 4.  **Build the project:**
     To run in "production" mode, you need to compile the TypeScript files to JavaScript.
