@@ -10,10 +10,10 @@
     "dev": "ts-node src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "test": "ts-node tests/run-evaluation.ts",
-    "test:benchmark": "ts-node tests/benchmark.ts",
-    "test:edge": "ts-node tests/edge-cases.ts",
-    "test:dataset": "npx ts-node tests/analyze-dataset.ts"
+    "test": "jest",
+    "test:cases": "ts-node tests/test-cases.ts",
+    "test:dataset": "ts-node tests/analyze-dataset.ts",
+    "eval": "ts-node tests/run-eval.ts"
   },
   "name": "processo-seletivo-ren-ts",
   "version": "1.0.0",

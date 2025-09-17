@@ -152,20 +152,34 @@ class Evaluator {
     }
 
     if (result.target_type !== 'none') {
-      if (!result.hasOwnProperty('extracted_value') || result.extracted_value === null || typeof result.extracted_value !== 'object') {
-        errors.push('Campo obrigatório ausente ou malformado: extracted_value');
+      let ev = null;
+      if (result.target_type === 'range') {
+        if (!result.hasOwnProperty('extracted_range') || result.extracted_range === null || typeof result.extracted_range !== 'object') {
+          errors.push('Campo obrigatório ausente ou malformado: extracted_range');
+        } else {
+          ev = result.extracted_range;
+        }
       } else {
-        const ev = result.extracted_value;
-        if (!ev.hasOwnProperty('asset') || !isString(ev.asset)) errors.push('extracted_value.asset ausente/malformado');
-        if (!ev.hasOwnProperty('currency') || !isString(ev.currency)) errors.push('extracted_value.currency ausente/malformado');
+        if (!result.hasOwnProperty('extracted_value') || result.extracted_value === null || typeof result.extracted_value !== 'object') {
+          errors.push('Campo obrigatório ausente ou malformado: extracted_value');
+        } else {
+          ev = result.extracted_value;
+        }
+      }
+      if (ev) {
+        if (!ev.hasOwnProperty('asset') || !isString(ev.asset)) errors.push(`${result.target_type === 'range' ? 'extracted_range' : 'extracted_value'}.asset ausente/malformado`);
+        if (!ev.hasOwnProperty('currency') || !isString(ev.currency)) errors.push(`${result.target_type === 'range' ? 'extracted_range' : 'extracted_value'}.currency ausente/malformado`);
         if (result.target_type === 'target_price' && (!('price' in ev) || !isNumber((ev as TargetPrice).price))) errors.push('extracted_value.price ausente/malformado');
         if (result.target_type === 'pct_change' && (!('percentage' in ev) || !isNumber((ev as PercentageChange).percentage))) errors.push('extracted_value.percentage ausente/malformado');
-        if (result.target_type === 'range' && (!('min' in ev) || !isNumber((ev as Range).min) || !('max' in ev) || !isNumber((ev as Range).max))) errors.push('extracted_value.range (min/max) ausente/malformado');
+        if (result.target_type === 'range' && (!('min' in ev) || !isNumber((ev as Range).min) || !('max' in ev) || !isNumber((ev as Range).max))) errors.push('extracted_range (min/max) ausente/malformado');
         if (result.target_type === 'ranking' && (!('ranking' in ev) || !isNumber((ev as any).ranking))) errors.push('extracted_value.ranking ausente/malformado');
       }
     } else {
       if (result.hasOwnProperty('extracted_value') && result.extracted_value !== null && result.extracted_value !== undefined) {
         errors.push('Campo extracted_value deve ser null/undefined quando target_type é none');
+      }
+      if (result.hasOwnProperty('extracted_range') && result.extracted_range !== null && result.extracted_range !== undefined) {
+        errors.push('Campo extracted_range deve ser null/undefined quando target_type é none');
       }
     }
     return errors;
@@ -227,40 +241,59 @@ class Evaluator {
     return `## ${c.notes[0]}\n\n**Input:**\n\`\`\`json\n${JSON.stringify(c.input, null, 2)}\n\`\`\`\n\n**Expected:**\n\`\`\`json\n${JSON.stringify(c.expected, null, 2)}\n\`\`\`\n\n**Actual:**\n\`\`\`json\n${JSON.stringify(c.actual, null, 2)}\n\`\`\`\n\n---\n`;
   }).join('\n');
     fs.writeFileSync('tricky_cases.md', header + content);
-    console.log('\nArquivo tricky_cases.md gerado com sucesso.');
+  console.log('\nFile tricky_cases.md generated successfully.');
   }
 
   public static numericError(expected: PredictionOutput, result: PredictionOutput): number {
-      if (!expected.extracted_value || !result.extracted_value || expected.target_type !== result.target_type) return 1; // Return 1 if types mismatch for failure count
-      if (expected.target_type === 'target_price') {
-        const exp = expected.extracted_value as TargetPrice;
-        const res = result.extracted_value as TargetPrice;
+      let exp, res;
+      if (expected.target_type === 'range') {
+        exp = expected.extracted_range || expected.extracted_value;
+        res = result.extracted_range || result.extracted_value;
+        if (!exp || !res) return 1;
+        // Type guard para Range
+        if ('min' in exp && 'max' in exp && 'min' in res && 'max' in res) {
+          return exp.min === res.min && exp.max === res.max ? 0 : 1;
+        }
+        return 1;
+      }
+      exp = expected.extracted_value;
+      res = result.extracted_value;
+      if (!exp || !res || expected.target_type !== result.target_type) return 1;
+      if (expected.target_type === 'target_price' && 'price' in exp && 'price' in res) {
         return exp.price === res.price ? 0 : 1;
       }
-      if (expected.target_type === 'pct_change') {
-        const exp = expected.extracted_value as PercentageChange;
-        const res = result.extracted_value as PercentageChange;
+      if (expected.target_type === 'pct_change' && 'percentage' in exp && 'percentage' in res) {
         return exp.percentage === res.percentage ? 0 : 1;
-      }
-      if (expected.target_type === 'range') {
-        const exp = expected.extracted_value as Range;
-        const res = result.extracted_value as Range;
-        return exp.min === res.min && exp.max === res.max ? 0 : 1;
       }
       return 0;
   }
 
   static isExactNumericMatch(expected: PredictionOutput, result: PredictionOutput): boolean {
-    if (!expected.extracted_value || !result.extracted_value || expected.target_type !== result.target_type) return false;
-    const exp = expected.extracted_value as any;
-    const res = result.extracted_value as any;
+    let exp, res;
+    if (expected.target_type === 'range') {
+      exp = expected.extracted_range || expected.extracted_value;
+      res = result.extracted_range || result.extracted_value;
+      if (!exp || !res) return false;
+      if (exp.asset !== res.asset || exp.currency !== res.currency) return false;
+      if ('min' in exp && 'max' in exp && 'min' in res && 'max' in res) {
+        return exp.min === res.min && exp.max === res.max;
+      }
+      return false;
+    }
+    exp = expected.extracted_value;
+    res = result.extracted_value;
+    if (!exp || !res || expected.target_type !== result.target_type) return false;
     if (exp.asset !== res.asset || exp.currency !== res.currency) return false;
-
     switch (expected.target_type) {
-      case 'target_price': return exp.price === res.price;
-      case 'pct_change': return exp.percentage === res.percentage;
-      case 'range': return exp.min === res.min && exp.max === res.max;
-      case 'ranking': return exp.ranking === res.ranking;
+      case 'target_price':
+        if ('price' in exp && 'price' in res) return exp.price === res.price;
+        return false;
+      case 'pct_change':
+        if ('percentage' in exp && 'percentage' in res) return exp.percentage === res.percentage;
+        return false;
+      case 'ranking':
+        if ('ranking' in exp && 'ranking' in res) return exp.ranking === res.ranking;
+        return false;
       default: return false;
     }
   }

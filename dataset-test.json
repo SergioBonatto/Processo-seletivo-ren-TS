@@ -1,0 +1,1596 @@
+
+--- Analyzing dataset.json ---
+
+--- Entry 1 ---
+Input: {
+  "post_text": "BTC breaking $100k before Christmas! Mark my words",
+  "post_created_at": "2022-09-20T14:30:00Z"
+}
+Output: {
+  "post_text": "BTC breaking $100k before Christmas! Mark my words",
+  "target_type": "none",
+  "extracted_value": null,
+  "bear_bull": 0,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "LLM parsing failed: Request failed with status code 429"
+  ]
+}
+
+--- Entry 2 ---
+Input: {
+  "post_text": "Ethereum will crash to $800 within the next 6 months",
+  "post_created_at": "2024-12-01T09:15:00Z"
+}
+Output: {
+  "post_text": "Ethereum will crash to $800 within the next 6 months",
+  "target_type": "none",
+  "extracted_value": null,
+  "bear_bull": 0,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "LLM parsing failed: Request failed with status code 429"
+  ]
+}
+
+--- Entry 3 ---
+Input: {
+  "post_text": "Solana $SOL rejected again. Buy the dip at $176 or the breakout at $207. Target stays $300.",
+  "post_created_at": "2025-09-11T16:02:14.745835Z"
+}
+Output: {
+  "post_text": "Solana $SOL rejected again. Buy the dip at $176 or the breakout at $207. Target stays $300.",
+  "target_type": "none",
+  "extracted_value": null,
+  "bear_bull": 0,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "LLM parsing failed: Request failed with status code 429"
+  ]
+}
+
+--- Analyzing dataset.json ---
+
+--- Entry 1 ---
+Input: {
+  "post_text": "BTC breaking $100k before Christmas! Mark my words",
+  "post_created_at": "2022-09-20T14:30:00Z"
+}
+Output: {
+  "post_text": "BTC breaking $100k before Christmas! Mark my words",
+  "target_type": "target_price",
+  "extracted_value": {
+    "asset": "BTC",
+    "price": 100000,
+    "currency": "USD"
+  },
+  "bear_bull": 80,
+  "timeframe": {
+    "explicit": true,
+    "start": null,
+    "end": "2022-12-25T00:00:00Z"
+  },
+  "notes": []
+}
+
+--- Entry 2 ---
+Input: {
+  "post_text": "Ethereum will crash to $800 within the next 6 months",
+  "post_created_at": "2024-12-01T09:15:00Z"
+}
+Output: {
+  "post_text": "Ethereum will crash to $800 within the next 6 months",
+  "target_type": "target_price",
+  "extracted_value": {
+    "asset": "ETH",
+    "price": 800,
+    "currency": "USD"
+  },
+  "bear_bull": -80,
+  "timeframe": {
+    "explicit": true,
+    "start": "2024-12-01T09:15:00Z",
+    "end": "2025-05-31T09:15:00Z"
+  },
+  "notes": []
+}
+
+--- Entry 3 ---
+Input: {
+  "post_text": "Solana $SOL rejected again. Buy the dip at $176 or the breakout at $207. Target stays $300.",
+  "post_created_at": "2025-09-11T16:02:14.745835Z"
+}
+Output: {
+  "post_text": "Solana $SOL rejected again. Buy the dip at $176 or the breakout at $207. Target stays $300.",
+  "target_type": "target_price",
+  "extracted_value": {
+    "asset": "SOL",
+    "price": 300,
+    "currency": "USD"
+  },
+  "bear_bull": 75,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": []
+}
+
+--- Entry 4 ---
+Input: {
+  "post_text": "$SOL will soon regain its bullish momentum? Looking to buy a lot if it dips to an OB/BPR level around $182. According to the LTF confirmations we get, this would be a good buying area. Eyes open",
+  "post_created_at": "2025-09-11T16:02:14.745977Z"
+}
+Output: {
+  "post_text": "$SOL will soon regain its bullish momentum? Looking to buy a lot if it dips to an OB/BPR level around $182. According to the LTF confirmations we get, this would be a good buying area. Eyes open",
+  "target_type": "target_price",
+  "extracted_value": {
+    "asset": "SOL",
+    "price": 182,
+    "currency": "USD"
+  },
+  "bear_bull": 70,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The prediction is based on technical analysis indicators (OB/BPR, LTF).",
+    "The sentiment is bullish, but the timeframe is not explicitly mentioned."
+  ]
+}
+
+--- Entry 5 ---
+Input: {
+  "post_text": "This time, ETHEREUM is coming to break $5,000 Believe in somETHing",
+  "post_created_at": "2025-09-11T16:02:14.745980Z"
+}
+Output: {
+  "post_text": "This time, ETHEREUM is coming to break $5,000 Believe in somETHing",
+  "target_type": "target_price",
+  "extracted_value": {
+    "asset": "ETH",
+    "price": 5000,
+    "currency": "USD"
+  },
+  "bear_bull": 80,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "No specific timeframe mentioned for the prediction."
+  ]
+}
+
+--- Entry 6 ---
+Input: {
+  "post_text": "DOGE hitting $2.50 when my ex finally texts me back (never)",
+  "post_created_at": "2025-09-11T16:02:14.745981Z"
+}
+Output: {
+  "post_text": "DOGE hitting $2.50 when my ex finally texts me back (never)",
+  "target_type": "target_price",
+  "extracted_value": {
+    "asset": "DOGE",
+    "price": 2.5,
+    "currency": "USD"
+  },
+  "bear_bull": 50,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The prediction is likely sarcastic or humorous based on the context."
+  ]
+}
+
+--- Entry 7 ---
+Input: {
+  "post_text": "PEPE hitting $0.001 by Valentine's Day. Love is in the air and so are meme coins",
+  "post_created_at": "2024-12-01T00:00:00Z"
+}
+Output: {
+  "post_text": "PEPE hitting $0.001 by Valentine's Day. Love is in the air and so are meme coins",
+  "target_type": "target_price",
+  "extracted_value": {
+    "asset": "PEPE",
+    "price": 0.001,
+    "currency": "USD"
+  },
+  "bear_bull": 80,
+  "timeframe": {
+    "explicit": true,
+    "start": null,
+    "end": "2025-02-14T00:00:00Z"
+  },
+  "notes": []
+}
+
+--- Entry 8 ---
+Input: {
+  "post_text": "XRP going to zero. Absolutely worthless by summer",
+  "post_created_at": "2024-12-01T00:00:00Z"
+}
+Output: {
+  "post_text": "XRP going to zero. Absolutely worthless by summer",
+  "target_type": "target_price",
+  "extracted_value": {
+    "asset": "XRP",
+    "price": 0,
+    "currency": "USD"
+  },
+  "bear_bull": -100,
+  "timeframe": {
+    "explicit": true,
+    "start": null,
+    "end": "2025-06-30T23:59:59Z"
+  },
+  "notes": [
+    "The prediction is very bearish, stating XRP will go to zero.",
+    "Timeframe inferred as 'by summer' from post_created_at of 2024-12-01."
+  ]
+}
+
+--- Entry 9 ---
+Input: {
+  "post_text": "ADA will touch $10 when my grandmother finally understands what blockchain is",
+  "post_created_at": "2025-09-11T16:02:14.745983Z"
+}
+Output: {
+  "post_text": "ADA will touch $10 when my grandmother finally understands what blockchain is",
+  "target_type": "target_price",
+  "extracted_value": {
+    "asset": "ADA",
+    "price": 10,
+    "currency": "USD"
+  },
+  "bear_bull": 50,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The timeframe is vague and based on a personal, unpredictable event."
+  ]
+}
+
+--- Entry 10 ---
+Input: {
+  "post_text": "AVAX $200 EOY or I quit trading forever",
+  "post_created_at": "2024-12-01T00:00:00Z"
+}
+Output: {
+  "post_text": "AVAX $200 EOY or I quit trading forever",
+  "target_type": "target_price",
+  "extracted_value": {
+    "asset": "AVAX",
+    "price": 200,
+    "currency": "USD"
+  },
+  "bear_bull": 100,
+  "timeframe": {
+    "explicit": true,
+    "start": null,
+    "end": "2024-12-31T23:59:59Z"
+  },
+  "notes": []
+}
+
+--- Entry 11 ---
+Input: {
+  "post_text": "Bitcoin flash crash to $15k incoming. Buy orders set",
+  "post_created_at": "2025-09-11T16:02:14.745985Z"
+}
+Output: {
+  "post_text": "Bitcoin flash crash to $15k incoming. Buy orders set",
+  "target_type": "target_price",
+  "extracted_value": {
+    "asset": "BTC",
+    "price": 15000,
+    "currency": "USD"
+  },
+  "bear_bull": -70,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The post mentions a flash crash, indicating a strong bearish sentiment."
+  ]
+}
+
+--- Entry 12 ---
+Input: {
+  "post_text": "SHIB deleting three zeros. $0.01 is inevitable within 18 months",
+  "post_created_at": "2024-12-01T00:00:00Z"
+}
+Output: {
+  "post_text": "SHIB deleting three zeros. $0.01 is inevitable within 18 months",
+  "target_type": "target_price",
+  "extracted_value": {
+    "asset": "SHIB",
+    "price": 0.01,
+    "currency": "USD"
+  },
+  "bear_bull": 80,
+  "timeframe": {
+    "explicit": true,
+    "start": "2024-12-01T00:00:00Z",
+    "end": "2026-05-31T23:59:59Z"
+  },
+  "notes": [
+    "The prediction is bullish with a clear target price and timeframe."
+  ]
+}
+
+--- Entry 13 ---
+Input: {
+  "post_text": "LINK $500 next cycle. Chainlink oracles will rule the world",
+  "post_created_at": "2025-09-11T16:02:14.745986Z"
+}
+Output: {
+  "post_text": "LINK $500 next cycle. Chainlink oracles will rule the world",
+  "target_type": "target_price",
+  "extracted_value": {
+    "asset": "LINK",
+    "price": 500,
+    "currency": "USD"
+  },
+  "bear_bull": 80,
+  "timeframe": {
+    "explicit": true,
+    "start": "2025-09-11T16:02:14.745986Z",
+    "end": null
+  },
+  "notes": [
+    "The prediction is for the next cycle, which is not a specific timeframe."
+  ]
+}
+
+--- Entry 14 ---
+Input: {
+  "post_text": "DOT to $3 if this bear market continues. Buckle up",
+  "post_created_at": "2025-09-11T16:02:14.745987Z"
+}
+Output: {
+  "post_text": "DOT to $3 if this bear market continues. Buckle up",
+  "target_type": "target_price",
+  "extracted_value": {
+    "asset": "DOT",
+    "price": 3,
+    "currency": "USD"
+  },
+  "bear_bull": -70,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The prediction is conditional on the bear market continuing",
+    "No specific timeframe is mentioned"
+  ]
+}
+
+--- Entry 15 ---
+Input: {
+  "post_text": "MATIC hitting $5 during the next FIFA World Cup. Football season pump incoming",
+  "post_created_at": "2024-12-01T00:00:00Z"
+}
+Output: {
+  "post_text": "MATIC hitting $5 during the next FIFA World Cup. Football season pump incoming",
+  "target_type": "target_price",
+  "extracted_value": {
+    "asset": "MATIC",
+    "price": 5,
+    "currency": "USD"
+  },
+  "bear_bull": 75,
+  "timeframe": {
+    "explicit": true,
+    "start": "2024-12-01T00:00:00Z",
+    "end": "2026-07-19T00:00:00Z"
+  },
+  "notes": [
+    "The next FIFA World Cup is scheduled to start on 2026-06-11 and end on 2026-07-19.",
+    "The sentiment is bullish due to the positive language used."
+  ]
+}
+
+--- Entry 16 ---
+Input: {
+  "post_text": "SOL back to $8. This Solana pump is fake",
+  "post_created_at": "2025-09-11T16:02:14.745989Z"
+}
+Output: {
+  "post_text": "SOL back to $8. This Solana pump is fake",
+  "target_type": "target_price",
+  "extracted_value": {
+    "asset": "SOL",
+    "price": 8,
+    "currency": "USD"
+  },
+  "bear_bull": -60,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The sentiment is bearish, suggesting the prediction is not optimistic."
+  ]
+}
+
+--- Entry 17 ---
+Input: {
+  "post_text": "UNI $50 when DeFi summer 2.0 hits. Mark this tweet",
+  "post_created_at": "2025-09-11T16:02:14.745990Z"
+}
+Output: {
+  "post_text": "UNI $50 when DeFi summer 2.0 hits. Mark this tweet",
+  "target_type": "target_price",
+  "extracted_value": {
+    "asset": "UNI",
+    "price": 50,
+    "currency": "USD"
+  },
+  "bear_bull": 80,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The timeframe is not explicitly mentioned, only implied by 'DeFi summer 2.0'",
+    "The sentiment is bullish, hence the high bear_bull score"
+  ]
+}
+
+--- Entry 18 ---
+Input: {
+  "post_text": "ATOM $100 minimum this bull run. Cosmos ecosystem undervalued AF",
+  "post_created_at": "2025-09-11T16:02:14.745991Z"
+}
+Output: {
+  "post_text": "ATOM $100 minimum this bull run. Cosmos ecosystem undervalued AF",
+  "target_type": "target_price",
+  "extracted_value": {
+    "asset": "ATOM",
+    "price": 100,
+    "currency": "USD"
+  },
+  "bear_bull": 80,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The prediction is for a minimum price during the current bull run, but no specific timeframe is mentioned."
+  ]
+}
+
+--- Entry 19 ---
+Input: {
+  "post_text": "DOGE $2.50 by my birthday. Best gift ever would be financial freedom",
+  "post_created_at": "2025-09-11T16:02:14.745992Z"
+}
+Output: {
+  "post_text": "DOGE $2.50 by my birthday. Best gift ever would be financial freedom",
+  "target_type": "target_price",
+  "extracted_value": {
+    "asset": "DOGE",
+    "price": 2.5,
+    "currency": "USD"
+  },
+  "bear_bull": 80,
+  "timeframe": {
+    "explicit": true,
+    "start": null,
+    "end": "2025-10-17T00:00:00Z"
+  },
+  "notes": [
+    "Assuming the user's birthday is October 17th, 2025."
+  ]
+}
+
+--- Entry 20 ---
+Input: {
+  "post_text": "ETH $10k minimum during the next halving cycle. Layer 2s will drive this",
+  "post_created_at": "2024-12-01T00:00:00Z"
+}
+Output: {
+  "post_text": "ETH $10k minimum during the next halving cycle. Layer 2s will drive this",
+  "target_type": "range",
+  "extracted_value": {
+    "asset": "ETH",
+    "min": 10000,
+    "max": 10000,
+    "currency": "USD"
+  },
+  "bear_bull": 80,
+  "timeframe": {
+    "explicit": true,
+    "start": "2025-04-20T00:00:00Z",
+    "end": "2025-08-10T00:00:00Z"
+  },
+  "notes": [
+    "The next Ethereum halving is expected to occur around April 2025, with the cycle lasting until the next halving in 2027. The post implies the price target will be reached within this cycle."
+  ]
+}
+
+--- Entry 21 ---
+Input: {
+  "post_text": "ALGO dead coin. Maybe $0.05 if they're lucky",
+  "post_created_at": "2025-09-11T16:02:14.745994Z"
+}
+Output: {
+  "post_text": "ALGO dead coin. Maybe $0.05 if they're lucky",
+  "target_type": "target_price",
+  "extracted_value": {
+    "asset": "ALGO",
+    "price": 0.05,
+    "currency": "USD"
+  },
+  "bear_bull": -80,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The post is highly bearish on ALGO, referring to it as a 'dead coin'.",
+    "The prediction of $0.05 is vague and lacks a timeframe."
+  ]
+}
+
+--- Entry 22 ---
+Input: {
+  "post_text": "SOL up 150% from current levels by end of Q1",
+  "post_created_at": "2024-12-15T16:45:00Z"
+}
+Output: {
+  "post_text": "SOL up 150% from current levels by end of Q1",
+  "target_type": "pct_change",
+  "extracted_value": {
+    "asset": "SOL",
+    "percentage": 150,
+    "currency": "USD"
+  },
+  "bear_bull": 100,
+  "timeframe": {
+    "explicit": true,
+    "start": "2024-12-15T16:45:00Z",
+    "end": "2025-03-31T23:59:59Z"
+  },
+  "notes": []
+}
+
+--- Entry 23 ---
+Input: {
+  "post_text": "DOGE gonna lose 60% of its value. Meme coins are dead",
+  "post_created_at": "2025-09-11T16:02:14.745995Z"
+}
+Output: {
+  "post_text": "DOGE gonna lose 60% of its value. Meme coins are dead",
+  "target_type": "pct_change",
+  "extracted_value": {
+    "asset": "DOGE",
+    "percentage": -60,
+    "currency": "USD"
+  },
+  "bear_bull": -80,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The post predicts a 60% decrease in DOGE's value without specifying a timeframe.",
+    "The sentiment is strongly bearish."
+  ]
+}
+
+--- Entry 24 ---
+Input: {
+  "post_text": "$ETH vs $BTC - 3W. Supertrend just flipped green. Last time this happened, Ethereum pumped +260% against Bitcoin.",
+  "post_created_at": "2025-09-11T16:02:14.745996Z"
+}
+Output: {
+  "post_text": "$ETH vs $BTC - 3W. Supertrend just flipped green. Last time this happened, Ethereum pumped +260% against Bitcoin.",
+  "target_type": "pct_change",
+  "extracted_value": {
+    "asset": "ETH",
+    "percentage": 260,
+    "currency": "BTC"
+  },
+  "bear_bull": 80,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The prediction is based on a historical pattern.",
+    "No explicit timeframe is mentioned."
+  ]
+}
+
+--- Entry 25 ---
+Input: {
+  "post_text": "ADA will dump 80% before finding a bottom. Cardano ecosystem is failing",
+  "post_created_at": "2025-09-11T16:02:14.745998Z"
+}
+Output: {
+  "post_text": "ADA will dump 80% before finding a bottom. Cardano ecosystem is failing",
+  "target_type": "pct_change",
+  "extracted_value": {
+    "asset": "ADA",
+    "percentage": -80,
+    "currency": "USD"
+  },
+  "bear_bull": -90,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The prediction is bearish with a significant percentage drop mentioned.",
+    "No specific timeframe is provided for the predicted drop."
+  ]
+}
+
+--- Entry 26 ---
+Input: {
+  "post_text": "AVAX pumping 300% by summer. Avalanche is the ETH killer we've been waiting for",
+  "post_created_at": "2024-12-01T00:00:00Z"
+}
+Output: {
+  "post_text": "AVAX pumping 300% by summer. Avalanche is the ETH killer we've been waiting for",
+  "target_type": "pct_change",
+  "extracted_value": {
+    "asset": "AVAX",
+    "percentage": 300,
+    "currency": "USD"
+  },
+  "bear_bull": 80,
+  "timeframe": {
+    "explicit": true,
+    "start": "2024-12-01T00:00:00Z",
+    "end": "2025-06-20T00:00:00Z"
+  },
+  "notes": [
+    "The timeframe 'by summer' is interpreted as the end of June 2025.",
+    "The sentiment is strongly bullish."
+  ]
+}
+
+--- Entry 27 ---
+Input: {
+  "post_text": "SHIB gonna lose 90% of its value when the meme coin hype dies",
+  "post_created_at": "2025-09-11T16:02:14.746179Z"
+}
+Output: {
+  "post_text": "SHIB gonna lose 90% of its value when the meme coin hype dies",
+  "target_type": "pct_change",
+  "extracted_value": {
+    "asset": "SHIB",
+    "percentage": -90,
+    "currency": "USD"
+  },
+  "bear_bull": -80,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The post does not specify a timeframe for the prediction."
+  ]
+}
+
+--- Entry 28 ---
+Input: {
+  "post_text": "LINK up 500% this cycle. Oracles are the backbone of DeFi",
+  "post_created_at": "2025-09-11T16:02:14.746181Z"
+}
+Output: {
+  "post_text": "LINK up 500% this cycle. Oracles are the backbone of DeFi",
+  "target_type": "pct_change",
+  "extracted_value": {
+    "asset": "LINK",
+    "percentage": 500,
+    "currency": "USD"
+  },
+  "bear_bull": 100,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The timeframe is vague ('this cycle') and cannot be quantified."
+  ]
+}
+
+--- Entry 29 ---
+Input: {
+  "post_text": "DOT will crash 70% in the next bear market. Polkadot narrative is dead",
+  "post_created_at": "2025-09-11T16:02:14.746182Z"
+}
+Output: {
+  "post_text": "DOT will crash 70% in the next bear market. Polkadot narrative is dead",
+  "target_type": "pct_change",
+  "extracted_value": {
+    "asset": "DOT",
+    "percentage": -70,
+    "currency": "USD"
+  },
+  "bear_bull": -80,
+  "timeframe": {
+    "explicit": true,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The timeframe is vague ('next bear market')",
+    "Strong bearish sentiment"
+  ]
+}
+
+--- Entry 30 ---
+Input: {
+  "post_text": "MATIC doubles from here by Q2 2025. Polygon zkEVM is the future",
+  "post_created_at": "2024-12-01T00:00:00Z"
+}
+Output: {
+  "post_text": "MATIC doubles from here by Q2 2025. Polygon zkEVM is the future",
+  "target_type": "pct_change",
+  "extracted_value": {
+    "asset": "MATIC",
+    "percentage": 100,
+    "currency": "USD"
+  },
+  "bear_bull": 80,
+  "timeframe": {
+    "explicit": true,
+    "start": "2024-12-01T00:00:00Z",
+    "end": "2025-03-31T23:59:59Z"
+  },
+  "notes": []
+}
+
+--- Entry 31 ---
+Input: {
+  "post_text": "UNI down 50% minimum during next correction. DeFi is overvalued",
+  "post_created_at": "2025-09-11T16:02:14.746184Z"
+}
+Output: {
+  "post_text": "UNI down 50% minimum during next correction. DeFi is overvalued",
+  "target_type": "pct_change",
+  "extracted_value": {
+    "asset": "UNI",
+    "percentage": -50,
+    "currency": "USD"
+  },
+  "bear_bull": -70,
+  "timeframe": {
+    "explicit": true,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The timeframe is vague ('next correction')",
+    "The prediction is bearish"
+  ]
+}
+
+--- Entry 32 ---
+Input: {
+  "post_text": "ATOM exploding 400% when Cosmos IBC really takes off",
+  "post_created_at": "2025-09-11T16:02:14.746185Z"
+}
+Output: {
+  "post_text": "ATOM exploding 400% when Cosmos IBC really takes off",
+  "target_type": "pct_change",
+  "extracted_value": {
+    "asset": "ATOM",
+    "percentage": 400,
+    "currency": "USD"
+  },
+  "bear_bull": 80,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The prediction is vague and does not specify a timeframe."
+  ]
+}
+
+--- Entry 33 ---
+Input: {
+  "post_text": "ALGO bleeding another 60%. This project is going nowhere",
+  "post_created_at": "2025-09-11T16:02:14.746188Z"
+}
+Output: {
+  "post_text": "ALGO bleeding another 60%. This project is going nowhere",
+  "target_type": "pct_change",
+  "extracted_value": {
+    "asset": "ALGO",
+    "percentage": -60,
+    "currency": "USD"
+  },
+  "bear_bull": -100,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The prediction is vague and lacks a timeframe."
+  ]
+}
+
+--- Entry 34 ---
+Input: {
+  "post_text": "XRP might pump 200% if they win the SEC case next year",
+  "post_created_at": "2024-12-01T00:00:00Z"
+}
+Output: {
+  "post_text": "XRP might pump 200% if they win the SEC case next year",
+  "target_type": "pct_change",
+  "extracted_value": {
+    "asset": "XRP",
+    "percentage": 200,
+    "currency": "USD"
+  },
+  "bear_bull": 75,
+  "timeframe": {
+    "explicit": true,
+    "start": "2024-12-01T00:00:00Z",
+    "end": "2025-12-31T23:59:59Z"
+  },
+  "notes": [
+    "The prediction is conditional on the outcome of the SEC case",
+    "The timeframe is inferred as 'next year' from the post creation date"
+  ]
+}
+
+--- Entry 35 ---
+Input: {
+  "post_text": "NEAR dropping 40% before finding support. Layer 1s are struggling",
+  "post_created_at": "2025-09-11T16:02:14.746190Z"
+}
+Output: {
+  "post_text": "NEAR dropping 40% before finding support. Layer 1s are struggling",
+  "target_type": "pct_change",
+  "extracted_value": {
+    "asset": "NEAR",
+    "percentage": -40,
+    "currency": "USD"
+  },
+  "bear_bull": -50,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The prediction is vague and does not specify a timeframe."
+  ]
+}
+
+--- Entry 36 ---
+Input: {
+  "post_text": "FTM will 10x from current levels. Fantom Opera is underrated",
+  "post_created_at": "2025-09-11T16:02:14.746191Z"
+}
+Output: {
+  "post_text": "FTM will 10x from current levels. Fantom Opera is underrated",
+  "target_type": "pct_change",
+  "extracted_value": {
+    "asset": "FTM",
+    "percentage": 1000,
+    "currency": "USD"
+  },
+  "bear_bull": 80,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The post mentions a 10x increase, which is interpreted as a 1000% change.",
+    "No specific timeframe is mentioned."
+  ]
+}
+
+--- Entry 37 ---
+Input: {
+  "post_text": "LTC losing 30% more before halving pump kicks in",
+  "post_created_at": "2025-09-11T16:02:14.746192Z"
+}
+Output: {
+  "post_text": "LTC losing 30% more before halving pump kicks in",
+  "target_type": "pct_change",
+  "extracted_value": {
+    "asset": "LTC",
+    "percentage": -30,
+    "currency": "USD"
+  },
+  "bear_bull": -50,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The prediction is about a potential price drop before a halving event, but no specific timeframe is mentioned."
+  ]
+}
+
+--- Entry 38 ---
+Input: {
+  "post_text": "APT gonna moon 600% this bull run. Aptos Move language is revolutionary",
+  "post_created_at": "2025-09-11T16:02:14.746193Z"
+}
+Output: {
+  "post_text": "APT gonna moon 600% this bull run. Aptos Move language is revolutionary",
+  "target_type": "pct_change",
+  "extracted_value": {
+    "asset": "APT",
+    "percentage": 600,
+    "currency": "USD"
+  },
+  "bear_bull": 90,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The post mentions a 600% increase but does not specify a timeframe.",
+    "The sentiment is strongly bullish."
+  ]
+}
+
+--- Entry 39 ---
+Input: {
+  "post_text": "ICP will retrace 85% to pre-launch levels. Internet Computer was overhyped",
+  "post_created_at": "2025-09-11T16:02:14.746195Z"
+}
+Output: {
+  "post_text": "ICP will retrace 85% to pre-launch levels. Internet Computer was overhyped",
+  "target_type": "pct_change",
+  "extracted_value": {
+    "asset": "ICP",
+    "percentage": -85,
+    "currency": "USD"
+  },
+  "bear_bull": -80,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The post does not specify a timeframe for the predicted 85% retracement.",
+    "The sentiment is strongly bearish, as indicated by the phrase 'overhyped'."
+  ]
+}
+
+--- Entry 40 ---
+Input: {
+  "post_text": "SAND up 250% when metaverse hype returns in 2025",
+  "post_created_at": "2025-01-01T00:00:00Z"
+}
+Output: {
+  "post_text": "SAND up 250% when metaverse hype returns in 2025",
+  "target_type": "pct_change",
+  "extracted_value": {
+    "asset": "SAND",
+    "percentage": 250,
+    "currency": "USD"
+  },
+  "bear_bull": 75,
+  "timeframe": {
+    "explicit": true,
+    "start": null,
+    "end": "2025-12-31T23:59:59Z"
+  },
+  "notes": [
+    "The prediction is bullish on SAND based on metaverse hype returning in 2025."
+  ]
+}
+
+--- Entry 41 ---
+Input: {
+  "post_text": "VET bleeding 45% more. VeChain partnerships don't mean anything anymore",
+  "post_created_at": "2025-09-11T16:02:14.746196Z"
+}
+Output: {
+  "post_text": "VET bleeding 45% more. VeChain partnerships don't mean anything anymore",
+  "target_type": "pct_change",
+  "extracted_value": {
+    "asset": "VET",
+    "percentage": -45,
+    "currency": "USD"
+  },
+  "bear_bull": -80,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The post indicates a negative sentiment and a price drop prediction for VET."
+  ]
+}
+
+--- Entry 42 ---
+Input: {
+  "post_text": "BTC will trade between 45k-55k throughout 2025",
+  "post_created_at": "2025-01-01T00:00:00Z"
+}
+Output: {
+  "post_text": "BTC will trade between 45k-55k throughout 2025",
+  "target_type": "range",
+  "extracted_value": {
+    "asset": "BTC",
+    "min": 45000,
+    "max": 55000,
+    "currency": "USD"
+  },
+  "bear_bull": 50,
+  "timeframe": {
+    "explicit": true,
+    "start": "2025-01-01T00:00:00Z",
+    "end": "2025-12-31T23:59:59Z"
+  },
+  "notes": []
+}
+
+--- Entry 43 ---
+Input: {
+  "post_text": "ETH consolidation zone: $2800-$3200 next month",
+  "post_created_at": "2024-11-25T10:30:00Z"
+}
+Output: {
+  "post_text": "ETH consolidation zone: $2800-$3200 next month",
+  "target_type": "range",
+  "extracted_value": {
+    "asset": "ETH",
+    "min": 2800,
+    "max": 3200,
+    "currency": "USD"
+  },
+  "bear_bull": 50,
+  "timeframe": {
+    "explicit": true,
+    "start": "2024-11-25T10:30:00Z",
+    "end": "2024-12-25T10:30:00Z"
+  },
+  "notes": []
+}
+
+--- Entry 44 ---
+Input: {
+  "post_text": "Tom Lee just said he thinks Ethereum $ETH could hit $5,500 in the near term and end the year at $10,000-$12,000",
+  "post_created_at": "2024-12-01T00:00:00Z"
+}
+Output: {
+  "post_text": "Tom Lee just said he thinks Ethereum $ETH could hit $5,500 in the near term and end the year at $10,000-$12,000",
+  "target_type": "range",
+  "extracted_value": {
+    "asset": "ETH",
+    "min": 10000,
+    "max": 12000,
+    "currency": "USD"
+  },
+  "bear_bull": 80,
+  "timeframe": {
+    "explicit": true,
+    "start": "2024-12-01T00:00:00Z",
+    "end": "2024-12-31T23:59:59Z"
+  },
+  "notes": [
+    "The prediction is bullish with a clear range for ETH by the end of the year."
+  ]
+}
+
+--- Entry 45 ---
+Input: {
+  "post_text": "SOL gonna crab between $180-$220 until my ex stops liking my Instagram stories which could be anywhere from 3 days to 3 years",
+  "post_created_at": "2025-09-11T16:02:14.746199Z"
+}
+Output: {
+  "post_text": "SOL gonna crab between $180-$220 until my ex stops liking my Instagram stories which could be anywhere from 3 days to 3 years",
+  "target_type": "range",
+  "extracted_value": {
+    "asset": "SOL",
+    "min": 180,
+    "max": 220,
+    "currency": "USD"
+  },
+  "bear_bull": 0,
+  "timeframe": {
+    "explicit": true,
+    "start": "2025-09-14T16:02:14.746199Z",
+    "end": "2028-09-11T16:02:14.746199Z"
+  },
+  "notes": [
+    "The timeframe is based on a humorous reference to the user's ex liking their Instagram stories."
+  ]
+}
+
+--- Entry 46 ---
+Input: {
+  "post_text": "ADA trapped in hell between $0.30-$0.45 forever or until Charles stops making videos about Africa whichever comes first lmao",
+  "post_created_at": "2025-09-11T16:02:14.746200Z"
+}
+Output: {
+  "post_text": "ADA trapped in hell between $0.30-$0.45 forever or until Charles stops making videos about Africa whichever comes first lmao",
+  "target_type": "range",
+  "extracted_value": {
+    "asset": "ADA",
+    "min": 0.3,
+    "max": 0.45,
+    "currency": "USD"
+  },
+  "bear_bull": -50,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The prediction is vague and includes a humorous remark about Charles' videos.",
+    "No explicit timeframe is mentioned."
+  ]
+}
+
+--- Entry 47 ---
+Input: {
+  "post_text": "DOGE will oscillate between 0.08-0.32 cents following Elon's mood swings. When he's happy dogs pump when he's sad they dump it's science",
+  "post_created_at": "2025-09-11T16:02:14.746201Z"
+}
+Output: {
+  "post_text": "DOGE will oscillate between 0.08-0.32 cents following Elon's mood swings. When he's happy dogs pump when he's sad they dump it's science",
+  "target_type": "range",
+  "extracted_value": {
+    "asset": "DOGE",
+    "min": 0.0008,
+    "max": 0.0032,
+    "currency": "USD"
+  },
+  "bear_bull": 20,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The post mentions a range for DOGE's price in cents, converted to USD.",
+    "No explicit timeframe is provided."
+  ]
+}
+
+--- Entry 48 ---
+Input: {
+  "post_text": "LINK marines we're stuck in $6.50-$8.20 purgatory until the next bull run or until my wife understands what an oracle is (never)",
+  "post_created_at": "2025-09-11T16:02:14.746202Z"
+}
+Output: {
+  "post_text": "LINK marines we're stuck in $6.50-$8.20 purgatory until the next bull run or until my wife understands what an oracle is (never)",
+  "target_type": "range",
+  "extracted_value": {
+    "asset": "LINK",
+    "min": 6.5,
+    "max": 8.2,
+    "currency": "USD"
+  },
+  "bear_bull": 20,
+  "timeframe": {
+    "explicit": true,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The timeframe is vague, referencing 'the next bull run' or 'until my wife understands what an oracle is (never)'"
+  ]
+}
+
+--- Entry 49 ---
+Input: {
+  "post_text": "AVAX consolidating $24-$31 but only on Tuesdays when Mercury isn't in retrograde and my horoscope says buy the dip",
+  "post_created_at": "2025-09-11T16:02:14.746203Z"
+}
+Output: {
+  "post_text": "AVAX consolidating $24-$31 but only on Tuesdays when Mercury isn't in retrograde and my horoscope says buy the dip",
+  "target_type": "range",
+  "extracted_value": {
+    "asset": "AVAX",
+    "min": 24,
+    "max": 31,
+    "currency": "USD"
+  },
+  "bear_bull": 20,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "The prediction is based on astrological conditions, which are not quantifiable or reliable for financial analysis.",
+    "No specific timeframe is mentioned."
+  ]
+}
+
+--- Entry 50 ---
+Input: {
+  "post_text": "XRP will chop between $0.45-$0.65 in this range until SEC guy gets tired of playing games or my pizza arrives whichever is sooner",
+  "post_created_at": "2025-09-11T16:02:14.746204Z"
+}
+Output: {
+  "post_text": "XRP will chop between $0.45-$0.65 in this range until SEC guy gets tired of playing games or my pizza arrives whichever is sooner",
+  "target_type": "range",
+  "extracted_value": {
+    "asset": "XRP",
+    "min": 0.45,
+    "max": 0.65,
+    "currency": "USD"
+  },
+  "bear_bull": 20,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "No clear timeframe mentioned",
+    "Sentiment is slightly bullish due to the range prediction"
+  ]
+}
+
+--- Entry 51 ---
+Input: {
+  "post_text": "MATIC stuck between $0.70-$0.90 forever because polygon rhymes with gone and that's bearish energy ser ngmi if you hold",
+  "post_created_at": "2025-09-11T16:02:14.746205Z"
+}
+Output: {
+  "post_text": "MATIC stuck between $0.70-$0.90 forever because polygon rhymes with gone and that's bearish energy ser ngmi if you hold",
+  "target_type": "none",
+  "extracted_value": null,
+  "bear_bull": 0,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "LLM parsing failed: Request failed with status code 429"
+  ]
+}
+
+--- Entry 52 ---
+Input: {
+  "post_text": "UNI dancing between $4.80-$6.20 until DeFi summer 2.0 hits or my mom stops asking if I won the lottery yet (spoiler: I didn't)",
+  "post_created_at": "2025-09-11T16:02:14.746207Z"
+}
+Output: {
+  "post_text": "UNI dancing between $4.80-$6.20 until DeFi summer 2.0 hits or my mom stops asking if I won the lottery yet (spoiler: I didn't)",
+  "target_type": "none",
+  "extracted_value": null,
+  "bear_bull": 0,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "LLM parsing failed: Request failed with status code 429"
+  ]
+}
+
+--- Entry 53 ---
+Input: {
+  "post_text": "DOT gonna sideways crab $4.10-$5.90 because my magic 8 ball said 'reply hazy try again' and that's basically range bound advice",
+  "post_created_at": "2025-09-11T16:02:14.746208Z"
+}
+Output: {
+  "post_text": "DOT gonna sideways crab $4.10-$5.90 because my magic 8 ball said 'reply hazy try again' and that's basically range bound advice",
+  "target_type": "none",
+  "extracted_value": null,
+  "bear_bull": 0,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "LLM parsing failed: Request failed with status code 429"
+  ]
+}
+
+--- Entry 54 ---
+Input: {
+  "post_text": "ATOM trapped between $7.80-$10.20 in the cosmos void until IBC actually does something or heat death of universe",
+  "post_created_at": "2025-09-11T16:02:14.746209Z"
+}
+Output: {
+  "post_text": "ATOM trapped between $7.80-$10.20 in the cosmos void until IBC actually does something or heat death of universe",
+  "target_type": "none",
+  "extracted_value": null,
+  "bear_bull": 0,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "LLM parsing failed: Request failed with status code 429"
+  ]
+}
+
+--- Entry 55 ---
+Input: {
+  "post_text": "ALGO range bound $0.12-$0.18 until they fix their tokenomics or my therapist says I'm cured of hopium addiction",
+  "post_created_at": "2025-09-11T16:02:14.746210Z"
+}
+Output: {
+  "post_text": "ALGO range bound $0.12-$0.18 until they fix their tokenomics or my therapist says I'm cured of hopium addiction",
+  "target_type": "none",
+  "extracted_value": null,
+  "bear_bull": 0,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "LLM parsing failed: Request failed with status code 429"
+  ]
+}
+
+--- Entry 56 ---
+Input: {
+  "post_text": "FTM oscillating $0.25-$0.40 like a ghost that can't decide if it wants to haunt this portfolio or move on to crypto heaven",
+  "post_created_at": "2025-09-11T16:02:14.746211Z"
+}
+Output: {
+  "post_text": "FTM oscillating $0.25-$0.40 like a ghost that can't decide if it wants to haunt this portfolio or move on to crypto heaven",
+  "target_type": "none",
+  "extracted_value": null,
+  "bear_bull": 0,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "LLM parsing failed: Request failed with status code 429"
+  ]
+}
+
+--- Entry 57 ---
+Input: {
+  "post_text": "NEAR chopping between $1.20-$1.80 until they rebrand to FAR or my landlord accepts crypto rent payments (he won't)",
+  "post_created_at": "2025-09-11T16:02:14.746212Z"
+}
+Output: {
+  "post_text": "NEAR chopping between $1.20-$1.80 until they rebrand to FAR or my landlord accepts crypto rent payments (he won't)",
+  "target_type": "none",
+  "extracted_value": null,
+  "bear_bull": 0,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "LLM parsing failed: Request failed with status code 429"
+  ]
+}
+
+--- Entry 58 ---
+Input: {
+  "post_text": "LTC grinding between $68-$88 because it's digital silver but silver is boring and Charlie Lee sold the top that one time",
+  "post_created_at": "2025-09-11T16:02:14.746213Z"
+}
+Output: {
+  "post_text": "LTC grinding between $68-$88 because it's digital silver but silver is boring and Charlie Lee sold the top that one time",
+  "target_type": "none",
+  "extracted_value": null,
+  "bear_bull": 0,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "LLM parsing failed: Request failed with status code 429"
+  ]
+}
+
+--- Entry 59 ---
+Input: {
+  "post_text": "SOL gonna crab between $180-$220 until my ex stops liking my Instagram stories which should be by Valentine's Day 2025 hopefully",
+  "post_created_at": "2024-12-01T00:00:00Z"
+}
+Output: {
+  "post_text": "SOL gonna crab between $180-$220 until my ex stops liking my Instagram stories which should be by Valentine's Day 2025 hopefully",
+  "target_type": "none",
+  "extracted_value": null,
+  "bear_bull": 0,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "LLM parsing failed: Request failed with status code 429"
+  ]
+}
+
+--- Entry 60 ---
+Input: {
+  "post_text": "DOGE will oscillate between 0.08-0.32 cents following Elon's mood swings throughout Q2 2025 when Tesla earnings come out",
+  "post_created_at": "2025-04-01T00:00:00Z"
+}
+Output: {
+  "post_text": "DOGE will oscillate between 0.08-0.32 cents following Elon's mood swings throughout Q2 2025 when Tesla earnings come out",
+  "target_type": "none",
+  "extracted_value": null,
+  "bear_bull": 0,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "LLM parsing failed: Request failed with status code 429"
+  ]
+}
+
+--- Entry 61 ---
+Input: {
+  "post_text": "XRP will chop between $0.45-$0.65 until the SEC case resolves by end of summer 2025 or my pizza arrives whichever is sooner",
+  "post_created_at": "2024-12-01T00:00:00Z"
+}
+Output: {
+  "post_text": "XRP will chop between $0.45-$0.65 until the SEC case resolves by end of summer 2025 or my pizza arrives whichever is sooner",
+  "target_type": "none",
+  "extracted_value": null,
+  "bear_bull": 0,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "LLM parsing failed: Request failed with status code 429"
+  ]
+}
+
+--- Entry 62 ---
+Input: {
+  "post_text": "AVAX will be top 5 by market cap this bull run",
+  "post_created_at": "2025-09-11T16:02:14.746215Z"
+}
+Output: {
+  "post_text": "AVAX will be top 5 by market cap this bull run",
+  "target_type": "none",
+  "extracted_value": null,
+  "bear_bull": 0,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "LLM parsing failed: Request failed with status code 429"
+  ]
+}
+
+--- Entry 63 ---
+Input: {
+  "post_text": "LINK dropping out of top 20 soon",
+  "post_created_at": "2025-09-11T16:02:14.746216Z"
+}
+Output: {
+  "post_text": "LINK dropping out of top 20 soon",
+  "target_type": "none",
+  "extracted_value": null,
+  "bear_bull": 0,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "LLM parsing failed: Request failed with status code 429"
+  ]
+}
+
+--- Entry 64 ---
+Input: {
+  "post_text": "PEPE gonna crack top 10 by market cap when normies discover memes are the future",
+  "post_created_at": "2025-09-11T16:02:14.746217Z"
+}
+Output: {
+  "post_text": "PEPE gonna crack top 10 by market cap when normies discover memes are the future",
+  "target_type": "none",
+  "extracted_value": null,
+  "bear_bull": 0,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "LLM parsing failed: Request failed with status code 429"
+  ]
+}
+
+--- Entry 65 ---
+Input: {
+  "post_text": "SOL will flip ETH and become #2 crypto by end of 2025 mark my words",
+  "post_created_at": "2024-12-01T00:00:00Z"
+}
+Output: {
+  "post_text": "SOL will flip ETH and become #2 crypto by end of 2025 mark my words",
+  "target_type": "none",
+  "extracted_value": null,
+  "bear_bull": 0,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "LLM parsing failed: Request failed with status code 429"
+  ]
+}
+
+--- Entry 66 ---
+Input: {
+  "post_text": "ADA falling out of top 15 soon. Cardano hype is dead and buried",
+  "post_created_at": "2025-09-11T16:02:14.746219Z"
+}
+Output: {
+  "post_text": "ADA falling out of top 15 soon. Cardano hype is dead and buried",
+  "target_type": "none",
+  "extracted_value": null,
+  "bear_bull": 0,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "LLM parsing failed: Request failed with status code 429"
+  ]
+}

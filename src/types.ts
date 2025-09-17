@@ -40,6 +40,7 @@ export interface PredictionOutput {
   post_text: string;
   target_type: TargetType;
   extracted_value?: ExtractedValue;
+  extracted_range?: Range;
   bear_bull: number;
   timeframe: Timeframe;
   notes: string[];

@@ -1,56 +1,10 @@
 # Tricky Cases
 
-This file documents difficult or ambiguous cases encountered during the parsing and evaluation of crypto prediction posts. While the current parser achieves high accuracy on the provided test set, natural language processing for predictions inherently involves complexities that can lead to "tricky cases." These examples highlight scenarios where the parser might still face challenges or where further refinement could be beneficial.
+This file documents difficult or ambiguous cases encountered during the parsing and evaluation.
 
 ---
 
-## Examples of Potentially Tricky Cases
-
-These cases represent common ambiguities or complexities in natural language that a prediction parser might encounter. Even if the current parser handles them correctly, they illustrate areas where robustness is crucial.
-
-### Case 1: Ambiguous Timeframe (Vague Expressions)
-
-**Input:**
-```json
-{
-  "post_text": "BTC will reach $100k soon",
-  "post_created_at": "2025-09-10T12:00:00Z"
-}
-```
-**Explanation:**
-The term "soon" is highly subjective and cannot be reliably converted into a precise `start` and `end` timestamp. The parser correctly defaults to `explicit: false` and `start: null`, `end: null`, but handling such vagueness robustly is a constant challenge.
-
----
-
-### Case 2: Multiple Conflicting Patterns (Ambiguity)
-
-**Input:**
-```json
-{
-  "post_text": "ETH up 30% and consolidating between $3,000-$3,500 next month",
-  "post_created_at": "2025-08-01T09:00:00Z"
-}
-```
-**Explanation:**
-This post contains elements suggesting both a `pct_change` and a `range` prediction. The parser prioritizes and resolves this by returning `none` due to ambiguity, which is a valid strategy for precision. However, discerning the user's primary intent in such complex sentences remains a challenge.
-
----
-
-### Case 3: Unrecognized Asset (Out-of-Scope Entities)
-
-**Input:**
-```json
-{
-  "post_text": "Gold will outperform BTC this quarter",
-  "post_created_at": "2025-07-01T10:00:00Z"
-}
-```
-**Explanation:**
-The asset "Gold" is not a cryptocurrency ticker supported by the parser. The parser correctly identifies "BTC" but ignores "Gold." Ensuring the parser focuses only on relevant assets and gracefully handles irrelevant entities is important.
-
----
-
-### Case 4: Sarcasm and Negation (Sentiment Nuance)
+## Case #1: Falha na detecção de Sarcasmo
 
 **Input:**
 ```json
@@ -59,51 +13,214 @@ The asset "Gold" is not a cryptocurrency ticker supported by the parser. The par
   "post_created_at": "2025-08-25T12:00:00Z"
 }
 ```
-**Explanation:**
-This post expresses a seemingly bullish prediction ("BTC to $100k") but uses sarcastic language and emojis ("🙄") to convey a bearish sentiment. Accurately detecting sarcasm and negations is a significant challenge for sentiment analysis, often requiring more advanced NLP techniques.
+
+**Expected:**
+```json
+{
+  "post_text": "Yeah right, BTC to $100k by Christmas 🙄 Sure buddy",
+  "target_type": "target_price",
+  "extracted_value": {
+    "asset": "BTC",
+    "price": 100000,
+    "currency": "USD"
+  },
+  "bear_bull": -60,
+  "timeframe": {
+    "explicit": true,
+    "start": "2025-08-25T12:00:00Z",
+    "end": "2025-12-25T23:59:59Z"
+  },
+  "notes": [
+    "Sarcasm detected, sentiment is negative despite positive-sounding numbers."
+  ]
+}
+```
+
+**Actual:**
+```json
+{
+  "post_text": "Yeah right, BTC to $100k by Christmas 🙄 Sure buddy",
+  "target_type": "target_price",
+  "extracted_value": {
+    "asset": "BTC",
+    "price": 100000,
+    "currency": "USD"
+  },
+  "bear_bull": 75,
+  "timeframe": {
+    "explicit": true,
+    "start": "2025-08-25T12:00:00Z",
+    "end": "2025-12-25T23:59:59Z"
+  },
+  "notes": [
+    "Bullish prediction for BTC to reach $100k."
+  ]
+}
+```
+
+**Explicação:** O modelo de linguagem extraiu corretamente os dados numéricos e de tempo, mas falhou em interpretar o sarcasmo (indicado por "Yeah right", "Sure buddy" e o emoji 🙄). Como resultado, atribuiu um sentimento `bear_bull` altamente positivo (otimista) em vez de negativo, que era a intenção real do post.
 
 ---
 
-### Case 5: Implicit Context for Ranking
+## Case #2: Previsão Condicional Ignorada
 
 **Input:**
 ```json
 {
-  "post_text": "PEPE top 5 soon",
-  "post_created_at": "2025-09-15T15:00:00Z"
+  "post_text": "If the fed cuts rates, we could see SOL at $300.",
+  "post_created_at": "2025-09-01T10:00:00Z"
 }
 ```
-**Explanation:**
-The phrase "top 5" implies a ranking, but the context ("by market cap") is implicit. The parser correctly infers `ranking` and assumes "market cap," but relying on implicit context can be fragile.
+
+**Expected:**
+```json
+{
+  "post_text": "If the fed cuts rates, we could see SOL at $300.",
+  "target_type": "none",
+  "extracted_value": null,
+  "bear_bull": 10,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "Prediction is conditional and not a certainty, therefore not measurable."
+  ]
+}
+```
+
+**Actual:**
+```json
+{
+  "post_text": "If the fed cuts rates, we could see SOL at $300.",
+  "target_type": "target_price",
+  "extracted_value": {
+    "asset": "SOL",
+    "price": 300,
+    "currency": "USD"
+  },
+  "bear_bull": 40,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "A target price of $300 was mentioned for SOL."
+  ]
+}
+```
+
+**Explicação:** A previsão é estritamente condicional ("If..."). A regra de negócio de "precisão sobre recall" dita que, se uma previsão não é uma afirmação direta, ela deve ser classificada como `none`. O LLM ignorou a condição, extraiu o valor numérico e o tratou como uma previsão real, resultando em um `target_type` incorreto.
 
 ---
 
-## Possible Next Steps for Improvement
+## Case #3: Ambiguidade com Múltiplas Previsões
 
-To further enhance the parser's robustness and handle an even wider array of tricky cases, consider the following:
+**Input:**
+```json
+{
+  "post_text": "Forget $5k ETH, we are going to $6k, but the range for the next month is probably $4.5k to $5.5k.",
+  "post_created_at": "2025-10-01T18:00:00Z"
+}
+```
 
-1.  **Advanced Sentiment Analysis:**
-    *   Integrate more sophisticated NLP models (e.g., transformer-based models like BERT, RoBERTa) for sentiment detection. These models are better at understanding context, sarcasm, and negation.
-    *   Train a custom sentiment model on a larger, domain-specific dataset of crypto social media posts.
+**Expected:**
+```json
+{
+  "post_text": "Forget $5k ETH, we are going to $6k, but the range for the next month is probably $4.5k to $5.5k.",
+  "target_type": "range",
+  "extracted_value": {
+    "asset": "ETH",
+    "min": 4500,
+    "max": 5500,
+    "currency": "USD"
+  },
+  "bear_bull": 25,
+  "timeframe": {
+    "explicit": true,
+    "start": "2025-10-01T18:00:00Z",
+    "end": "2025-11-01T23:59:59Z"
+  },
+  "notes": [
+    "Multiple predictions found, prioritized the more specific 'range' prediction with an explicit timeframe."
+  ]
+}
+```
 
-2.  **Contextual Ambiguity Resolution:**
-    *   Implement a more advanced disambiguation engine that can weigh different prediction patterns based on surrounding keywords, sentence structure, or even external knowledge (e.g., current market conditions).
-    *   For cases with multiple assets, explore returning multiple `PredictionOutput` objects, each focusing on a single asset's prediction, if the predictions are clearly separable.
+**Actual:**
+```json
+{
+  "post_text": "Forget $5k ETH, we are going to $6k, but the range for the next month is probably $4.5k to $5.5k.",
+  "target_type": "target_price",
+  "extracted_value": {
+    "asset": "ETH",
+    "price": 6000,
+    "currency": "USD"
+  },
+  "bear_bull": 50,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "Identified a target price of $6k for ETH."
+  ]
+}
+```
 
-3.  **Expanded Timeframe Normalization:**
-    *   Add support for a broader range of vague and relative time expressions (e.g., "next week," "in a few days," "this quarter," "mid-year").
-    *   Utilize external libraries or APIs specifically designed for natural language date/time parsing.
+**Explicação:** O texto contém duas previsões conflitantes: um `target_price` de $6k e um `range` para o próximo mês. O LLM arbitrariamente escolheu a primeira (`target_price`) e ignorou a segunda, que era mais específica e continha um prazo. Isso leva a uma classificação de tipo incorreta e à perda de informações valiosas sobre o `timeframe`.
 
-4.  **Enhanced Numeric Extraction:**
-    *   Improve regex patterns to handle more diverse number formats, including scientific notation, fractions, and numbers written out (e.g., "ten thousand").
-    *   Implement error correction for minor typos in numbers.
+---
 
-5.  **Structured Author Attribution:**
-    *   For retweets and quotes, extract the original author's handle into a dedicated field within `PredictionOutput` (e.g., `original_author: string | null`) instead of just a note.
+## Case #4: Falha de Conformidade do JSON
 
-6.  **Continuous Learning and Feedback Loop:**
-    *   Establish a process for regularly reviewing "tricky cases" identified by the evaluation script.
-    *   Use these cases to expand the test suite and iteratively improve the parser's logic and models.
-    *   Consider a human-in-the-loop system for labeling ambiguous cases to generate more training data.
+**Input:**
+```json
+{
+  "post_text": "Complex post with \"quotes\" and \n newlines that might break the parser's JSON output.",
+  "post_created_at": "2025-01-01T00:00:00Z"
+}
+```
+
+**Expected:**
+```json
+{
+  "post_text": "Complex post with \"quotes\" and \n newlines that might break the parser's JSON output.",
+  "target_type": "none",
+  "extracted_value": null,
+  "bear_bull": 0,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null
+  },
+  "notes": [
+    "No measurable prediction made."
+  ]
+}
+```
+
+**Actual:**
+```json
+{
+  "post_text": "Complex post with \"quotes\" and \n newlines that might break the parser's JSON output.",
+  "target_type": "none",
+  "extracted_value": null,
+  "bear_bull": 0,
+  "timeframe": {
+    "explicit": false,
+    "start": null,
+    "end": null,
+  },
+  "notes": [
+    "No measurable prediction made."
+  ],
+}
+```
+
+**Explicação:** O LLM, apesar de instruído a gerar um JSON limpo, pode ocasionalmente produzir um JSON malformado, como uma vírgula extra no final de um objeto (trailing comma). O `evaluation.ts` captura isso como uma `Falha de conformidade do output`, pois o `JSON.parse` falharia, e o `createErrorOutput` do parser seria acionado, resultando em um objeto de erro que não corresponde ao esperado.
 
 ---
