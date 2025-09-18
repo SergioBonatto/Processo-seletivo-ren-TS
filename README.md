@@ -222,7 +222,7 @@ The architecture consists of three main components:
 
 1.  **Clone the repository:**
     ```bash
-    git clone <repository-url>
+    git clone https://github.com/SergioBonatto/Processo-seletivo-ren-TS
     cd Processo-seletivo-ren-TS
     ```
 
