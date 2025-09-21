@@ -11,7 +11,7 @@ class Evaluator {
   private parser = new CryptoPredictionParser();
 
   /**
-   * Avaliação completa conforme requisitos do README.md
+   * Full evaluation
    */
   public async evaluate(testCases: TestCase[]): Promise<void> {
     const executionTimes: number[] = [];
@@ -31,7 +31,7 @@ class Evaluator {
     let timeframeCorrect = 0;
     let timeframeTotal = 0;
 
-    // Inicializar estruturas
+    // Initialize structures
     types.forEach(t1 => {
       confusionMatrix[t1] = {};
       perTypeCorrect[t1] = { correct: 0, total: 0 };
@@ -62,10 +62,10 @@ class Evaluator {
             input: testCase.input,
             expected: testCase.expected,
             actual: result,
-            notes: [`Case #${idx + 1}: Falha de conformidade do output -> ${conformityErrors.join('; ')}`]
+            notes: [`Case #${idx + 1}: Output conformity failure -> ${conformityErrors.join('; ')}`]
         });
         idx++;
-        continue; // Não processa métricas para este caso
+        continue; // Do not process metrics for this case
       }
 
       const expected = testCase.expected;
@@ -80,12 +80,12 @@ class Evaluator {
         perTypeCorrect[expected.target_type]!.correct++;
         totalCorrect++;
       } else {
-        trickyCases.push({
-            input: testCase.input,
-            expected: testCase.expected,
-            actual: result,
-            notes: [`Case #${idx + 1}: Tipo esperado ${expected.target_type}, obtido ${result.target_type}`]
-        });
+    trickyCases.push({
+      input: testCase.input,
+      expected: testCase.expected,
+      actual: result,
+      notes: [`Case #${idx + 1}: Expected type ${expected.target_type}, got ${result.target_type}`]
+    });
       }
 
       sentimentErrors.push(Math.abs(result.bear_bull - expected.bear_bull));
@@ -94,12 +94,12 @@ class Evaluator {
 
       if (['target_price', 'range', 'pct_change', 'ranking'].includes(expected.target_type) && result.extracted_value && expected.extracted_value) {
         if (Evaluator.numericError(expected, result) > 0) {
-            trickyCases.push({
-                input: testCase.input,
-                expected: testCase.expected,
-                actual: result,
-                notes: [`Case #${idx + 1}: Erro de extração numérica`]
-            });
+          trickyCases.push({
+            input: testCase.input,
+            expected: testCase.expected,
+            actual: result,
+            notes: [`Case #${idx + 1}: Numeric extraction error`]
+          });
         }
         exactNumericTotal++;
         if (Evaluator.isExactNumericMatch(expected, result)) {
@@ -116,7 +116,7 @@ class Evaluator {
                 input: testCase.input,
                 expected: testCase.expected,
                 actual: result,
-                notes: [`Case #${idx + 1}: Erro de timeframe. Esperado: ${JSON.stringify(expected.timeframe)}, Obtido: ${JSON.stringify(result.timeframe)}`]
+                notes: [`Case #${idx + 1}: Timeframe error. Expected: ${JSON.stringify(expected.timeframe)}, Got: ${JSON.stringify(result.timeframe)}`]
             });
         }
       }
@@ -136,50 +136,50 @@ class Evaluator {
     const isArrayOfStrings = (val: any): boolean => Array.isArray(val) && val.every(isString);
 
     if (!result.hasOwnProperty('target_type') || !isString(result.target_type) || !['target_price', 'pct_change', 'range', 'ranking', 'none'].includes(result.target_type)) {
-      errors.push(`Campo obrigatório ausente ou malformado: target_type (recebido: ${result.target_type})`);
+      errors.push(`Required field missing or malformed: target_type (received: ${result.target_type})`);
     }
     if (!result.hasOwnProperty('bear_bull') || !isNumber(result.bear_bull)) {
-      errors.push('Campo obrigatório ausente ou malformado: bear_bull');
+      errors.push('Required field missing or malformed: bear_bull');
     }
     if (!result.hasOwnProperty('timeframe') || typeof result.timeframe !== 'object' || result.timeframe === null || !result.timeframe.hasOwnProperty('explicit') || !isBool(result.timeframe.explicit) || !isNullOrString(result.timeframe.start) || !isNullOrString(result.timeframe.end)) {
-      errors.push('Campo obrigatório ausente ou malformado: timeframe');
+      errors.push('Required field missing or malformed: timeframe');
     }
     if (!result.hasOwnProperty('notes') || !isArrayOfStrings(result.notes)) {
-      errors.push('Campo obrigatório ausente ou malformado: notes');
+      errors.push('Required field missing or malformed: notes');
     }
     if (!result.hasOwnProperty('post_text') || !isString(result.post_text)) {
-        errors.push('Campo obrigatório ausente ou malformado: post_text');
+        errors.push('Required field missing or malformed: post_text');
     }
 
     if (result.target_type !== 'none') {
       let ev = null;
       if (result.target_type === 'range') {
-        if (!result.hasOwnProperty('extracted_range') || result.extracted_range === null || typeof result.extracted_range !== 'object') {
-          errors.push('Campo obrigatório ausente ou malformado: extracted_range');
+          if (!result.hasOwnProperty('extracted_range') || result.extracted_range === null || typeof result.extracted_range !== 'object') {
+            errors.push('Required field missing or malformed: extracted_range');
         } else {
           ev = result.extracted_range;
         }
       } else {
-        if (!result.hasOwnProperty('extracted_value') || result.extracted_value === null || typeof result.extracted_value !== 'object') {
-          errors.push('Campo obrigatório ausente ou malformado: extracted_value');
+          if (!result.hasOwnProperty('extracted_value') || result.extracted_value === null || typeof result.extracted_value !== 'object') {
+            errors.push('Required field missing or malformed: extracted_value');
         } else {
           ev = result.extracted_value;
         }
       }
       if (ev) {
-        if (!ev.hasOwnProperty('asset') || !isString(ev.asset)) errors.push(`${result.target_type === 'range' ? 'extracted_range' : 'extracted_value'}.asset ausente/malformado`);
-        if (!ev.hasOwnProperty('currency') || !isString(ev.currency)) errors.push(`${result.target_type === 'range' ? 'extracted_range' : 'extracted_value'}.currency ausente/malformado`);
-        if (result.target_type === 'target_price' && (!('price' in ev) || !isNumber((ev as TargetPrice).price))) errors.push('extracted_value.price ausente/malformado');
-        if (result.target_type === 'pct_change' && (!('percentage' in ev) || !isNumber((ev as PercentageChange).percentage))) errors.push('extracted_value.percentage ausente/malformado');
-        if (result.target_type === 'range' && (!('min' in ev) || !isNumber((ev as Range).min) || !('max' in ev) || !isNumber((ev as Range).max))) errors.push('extracted_range (min/max) ausente/malformado');
-        if (result.target_type === 'ranking' && (!('ranking' in ev) || !isNumber((ev as any).ranking))) errors.push('extracted_value.ranking ausente/malformado');
+        if (!ev.hasOwnProperty('asset') || !isString(ev.asset)) errors.push(`${result.target_type === 'range' ? 'extracted_range' : 'extracted_value'}.asset missing/malformed`);
+        if (!ev.hasOwnProperty('currency') || !isString(ev.currency)) errors.push(`${result.target_type === 'range' ? 'extracted_range' : 'extracted_value'}.currency missing/malformed`);
+        if (result.target_type === 'target_price' && (!('price' in ev) || !isNumber((ev as TargetPrice).price))) errors.push('extracted_value.price missing/malformed');
+        if (result.target_type === 'pct_change' && (!('percentage' in ev) || !isNumber((ev as PercentageChange).percentage))) errors.push('extracted_value.percentage missing/malformed');
+        if (result.target_type === 'range' && (!('min' in ev) || !isNumber((ev as Range).min) || !('max' in ev) || !isNumber((ev as Range).max))) errors.push('extracted_range (min/max) missing/malformed');
+        if (result.target_type === 'ranking' && (!('ranking' in ev) || !isNumber((ev as any).ranking))) errors.push('extracted_value.ranking missing/malformed');
       }
     } else {
       if (result.hasOwnProperty('extracted_value') && result.extracted_value !== null && result.extracted_value !== undefined) {
-        errors.push('Campo extracted_value deve ser null/undefined quando target_type é none');
+        errors.push('Field extracted_value must be null/undefined when target_type is none');
       }
       if (result.hasOwnProperty('extracted_range') && result.extracted_range !== null && result.extracted_range !== undefined) {
-        errors.push('Campo extracted_range deve ser null/undefined quando target_type é none');
+        errors.push('Field extracted_range must be null/undefined when target_type is none');
       }
     }
     return errors;
@@ -201,10 +201,10 @@ class Evaluator {
 
     if (exactNumericTotal > 0) {
       const exactRate = (exactNumericCorrect / exactNumericTotal) * 100;
-      console.log(`Taxa de acerto exato na extração numérica: ${exactRate.toFixed(2)}% (${exactNumericCorrect}/${exactNumericTotal} casos)`);
-      if (exactRate < 80) console.warn(`AVISO: Acurácia da extração numérica (${exactRate.toFixed(2)}%) está abaixo do mínimo de 80%.`);
+      console.log(`Exact match rate for numeric extraction: ${exactRate.toFixed(2)}% (${exactNumericCorrect}/${exactNumericTotal} cases)`);
+      if (exactRate < 80) console.warn(`WARNING: Numeric extraction accuracy (${exactRate.toFixed(2)}%) is below the minimum of 80%.`);
     } else {
-      console.log('Nenhum caso de extração numérica para avaliar acerto exato.');
+      console.log('No numeric extraction cases to evaluate exact match rate.');
     }
 
     console.log('\nConfusion Matrix:');
@@ -217,22 +217,22 @@ class Evaluator {
     });
 
     if (spearman === null) {
-      console.error('ERRO: Não foi possível calcular a correlação de Spearman para sentimento.');
+      console.error('ERROR: Could not calculate Spearman correlation for sentiment.');
     } else if (spearman < 0.60) {
-      console.error(`ERRO: Correlação de Spearman (${spearman.toFixed(3)}) abaixo do mínimo de 0.60.`);
+      console.error(`ERROR: Spearman correlation (${spearman.toFixed(3)}) is below the minimum of 0.60.`);
     }
 
-    console.log('\n=== Relatório de Custo/Falhas ===');
-    const sortedTimes = [...executionTimes].sort((a, b) => a - b);
-    const p50 = sortedTimes[Math.floor(sortedTimes.length * 0.5)] || 0;
-    const p95 = sortedTimes[Math.floor(sortedTimes.length * 0.95)] || 0;
-    console.log(`p50 (mediana): ${p50.toFixed(2)}ms`);
-    console.log(`p95: ${p95.toFixed(2)}ms`);
-    const avgBatch1 = batch1Times.length ? (batch1Times.reduce((a, b) => a + b, 0) / batch1Times.length) : 0;
-    console.log(`Tempo médio batch=1: ${avgBatch1.toFixed(2)}ms`);
-    const avgBatch16 = batch16Times.length ? (batch16Times.reduce((a, b) => a + b, 0) / batch16Times.length) : 0;
-    console.log(`Tempo médio batch=16: ${avgBatch16.toFixed(2)}ms`);
-    console.log(`Total de falhas de conformidade/execução: ${failCount} (${((failCount / totalCases) * 100).toFixed(2)}%)`);
+  console.log('\n=== Cost/Failure Report ===');
+  const sortedTimes = [...executionTimes].sort((a, b) => a - b);
+  const p50 = sortedTimes[Math.floor(sortedTimes.length * 0.5)] || 0;
+  const p95 = sortedTimes[Math.floor(sortedTimes.length * 0.95)] || 0;
+  console.log(`p50 (median): ${p50.toFixed(2)}ms`);
+  console.log(`p95: ${p95.toFixed(2)}ms`);
+  const avgBatch1 = batch1Times.length ? (batch1Times.reduce((a, b) => a + b, 0) / batch1Times.length) : 0;
+  console.log(`Average batch=1 time: ${avgBatch1.toFixed(2)}ms`);
+  const avgBatch16 = batch16Times.length ? (batch16Times.reduce((a, b) => a + b, 0) / batch16Times.length) : 0;
+  console.log(`Average batch=16 time: ${avgBatch16.toFixed(2)}ms`);
+  console.log(`Total conformity/execution failures: ${failCount} (${((failCount / totalCases) * 100).toFixed(2)}%)`);
   }
 
   private generateTrickyCasesMarkdown(trickyCases: { input: PostInput, expected: PredictionOutput, actual: PredictionOutput, notes: string[] }[]): void {

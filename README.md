@@ -8,177 +8,6 @@
 This project implements a backend service in Node.js and TypeScript to analyze social media posts about cryptocurrencies and extract financial forecasts in a structured way.
 ---
 
-## 9. Output Examples (by type)
-
-### Target Price
-```json
-{
-    "target_type": "target_price",
-    "extracted_value": {
-        "asset": "BTC",
-        "price": 80000,
-        "currency": "USD"
-    },
-    "timeframe": {
-        "explicit": true,
-        "start": "2025-08-25T12:00:00Z",
-        "end": "2025-12-31T23:59:59Z"
-    },
-    "bear_bull": 78,
-    "notes": [
-        "End of year converted to December 31st",
-        "Assumed USD currency",
-        "Quote tweet - prediction attributed to @crypto_bull_2024",
-        "Rocket emoji indicates high bullish sentiment"
-    ]
-}
-```
-
-### Percentage Change
-```json
-{
-    "target_type": "pct_change",
-    "extracted_value": {
-        "asset": "SOL",
-        "percentage": -40,
-        "currency": "USD"
-    },
-    "timeframe": {
-        "explicit": false,
-        "start": null,
-        "end": null
-    },
-    "bear_bull": -75,
-    "notes": [
-        "No specific timeframe mentioned",
-        "Retweet - original prediction by @sol_predictions",
-        "Bear market language indicates strong negative sentiment",
-        "Assumed USD currency"
-    ]
-}
-```
-
-### Range
-```json
-{
-    "target_type": "range",
-    "extracted_range": {
-        "asset": "ETH",
-        "min": 3200,
-        "max": 3800,
-        "currency": "USD"
-    },
-    "timeframe": {
-        "explicit": true,
-        "start": "2025-08-25T12:00:00Z",
-        "end": "2025-09-25T23:59:59Z"
-    },
-    "bear_bull": 15,
-    "notes": [
-        "Next month calculated from post date",
-        "Chart analysis image attached - technical analysis basis",
-        "Consolidation suggests neutral-to-slightly-bullish sentiment",
-        "Assumed USD currency"
-    ]
-}
-```
-
-### Ranking
-```json
-{
-    "target_type": "ranking",
-    "extracted_value": {
-        "asset": "PEPE",
-        "ranking": 10,
-        "currency": "USD"
-    },
-    "timeframe": {
-        "explicit": false,
-        "start": null,
-        "end": null
-    },
-    "bear_bull": 65,
-    "notes": [
-        "Market cap ranking assumed",
-        "This cycle is vague timeframe",
-        "Quote tweet disagreeing with @bearish_analyst's bearish prediction",
-        "Frog and diamond emojis indicate strong bullish sentiment",
-        "USD market cap ranking context"
-    ]
-}
-```
-
-### None
-```json
-{
-    "target_type": "none",
-    "timeframe": {
-        "explicit": false,
-        "start": null,
-        "end": null
-    },
-    "bear_bull": -20,
-    "notes": [
-        "No measurable prediction made",
-        "Retweet with additional commentary by @former_crypto_bull",
-        "General market volatility observation only",
-        "Slight negative sentiment due to uncertainty and anti-prediction stance",
-        "Shrugging emoji indicates resignation/uncertainty"
-    ]
-}
-```
-
----
-
-## 10. Quality Bars (Acceptance Criteria)
-
-## 10. Quality Bars (How the project meets the criteria)
-
-- **Target type classification:**
-    - The parser uses an LLM with a detailed prompt to identify the forecast type. Evaluation is performed by the script `src/evaluation.ts`, which calculates macro accuracy (by category) and confusion matrix. Typical results can be checked in the test output.
-
-- **Exact numeric extraction:**
-    - The system requires exact match for price and range values, with no tolerance. The method `isExactNumericMatch` in `src/evaluation.ts` validates this match. Metrics are reported in the console after running `npm test`.
-
-- **Normalization of time phrases:**
-    - Expressions like "end of Q3" or "next month" are converted to UTC using the post date as reference. The LLM is instructed via prompt and results are evaluated by the evaluation script, which calculates time normalization accuracy.
-
-- **Sentiment (Spearman):**
-    - The `bear_bull` field is extracted by the LLM and compared with the expected value in the tests. Spearman correlation is calculated by the method `spearmanCorrelation` in `src/evaluation.ts` and reported in the test output.
-
-All results can be audited in the output files and in the console after running the evaluation scripts.
-
----
-
-## 11. Parsing Rules
-
-## 11. Parsing Rules (Implementation)
-
-- **Quotes, replies and reposts:** The parser instructs the LLM to correctly identify and attribute forecasts made in retweets, replies and quotes, adding notes in the `notes` field.
-- **Time normalization:** The `post_created_at` field is always sent to the LLM, which converts relative expressions to UTC. The evaluation script validates the accuracy of these conversions.
-- **Precision vs recall:** The system prioritizes precision: if the LLM does not identify a measurable forecast, it returns `target_type: none` and adds an explanation in `notes`.
-- **Standardized tickers:** The LLM is instructed to accept only recognized tickers, disambiguating via context. Ambiguous cases are treated as `none`.
-- **Modular design:** The parser (`src/parser.ts`) can be easily adapted for other models or rules, as all extraction logic is isolated and the prompt can be adjusted.
-
----
-
-## 12. Deliverables Checklist
-
-## 12. Deliverables Checklist (How to access each item)
-
-1. **Minimum service:** The endpoint `POST /parse_prediction` is implemented in `src/server.ts`. The README provides usage examples, setup and environment variables.
-2. **Evaluation script:** The script `tests/run-eval.ts` runs the full evaluation, generating metrics and confusion matrix in the console.
-3. **Cost report:** The evaluation script reports latencies (`p50`, `p95`) for batch=1 and batch=16, and counts failures. Check the console output after running the tests.
-4. **File tricky_cases.md:** Automatically generated by the evaluation script, contains difficult examples and detailed explanations for each tricky case.
-
-The core of the system uses a Language Model (LLM) via OpenRouter API to interpret the natural language of posts, classifying them into different forecast types (`target_price`, `pct_change`, `range`, `ranking` or `none`) and extracting numeric values, timeframes and sentiment (bullish/bearish).
-
-The architecture consists of three main components:
-1.  **API Server (`src/server.ts`):** An Express server exposing the `POST /parse_prediction` endpoint.
-2.  **Parsing Module (`src/parser.ts`):** Where the communication logic with the LLM resides, sending the post text and receiving the structured JSON analysis.
-3.  **Evaluation Suite (`src/evaluation.ts` and `tests/`):** A set of scripts and test cases to validate the quality and performance of the parser against the metrics defined in the technical specification.
-
----
 
 ## 2. Tech Stack
 
@@ -401,3 +230,171 @@ The `ExtractedValue` types are:
 -   **Ranking**: `{ asset, ranking, currency }`
 
 For a detailed definition, see the file `src/types.ts`.
+
+---
+
+## 9. Output Examples (by type)
+
+### Target Price
+```json
+{
+    "target_type": "target_price",
+    "extracted_value": {
+        "asset": "BTC",
+        "price": 80000,
+        "currency": "USD"
+    },
+    "timeframe": {
+        "explicit": true,
+        "start": "2025-08-25T12:00:00Z",
+        "end": "2025-12-31T23:59:59Z"
+    },
+    "bear_bull": 78,
+    "notes": [
+        "End of year converted to December 31st",
+        "Assumed USD currency",
+        "Quote tweet - prediction attributed to @crypto_bull_2024",
+        "Rocket emoji indicates high bullish sentiment"
+    ]
+}
+```
+
+### Percentage Change
+```json
+{
+    "target_type": "pct_change",
+    "extracted_value": {
+        "asset": "SOL",
+        "percentage": -40,
+        "currency": "USD"
+    },
+    "timeframe": {
+        "explicit": false,
+        "start": null,
+        "end": null
+    },
+    "bear_bull": -75,
+    "notes": [
+        "No specific timeframe mentioned",
+        "Retweet - original prediction by @sol_predictions",
+        "Bear market language indicates strong negative sentiment",
+        "Assumed USD currency"
+    ]
+}
+```
+
+### Range
+```json
+{
+    "target_type": "range",
+    "extracted_range": {
+        "asset": "ETH",
+        "min": 3200,
+        "max": 3800,
+        "currency": "USD"
+    },
+    "timeframe": {
+        "explicit": true,
+        "start": "2025-08-25T12:00:00Z",
+        "end": "2025-09-25T23:59:59Z"
+    },
+    "bear_bull": 15,
+    "notes": [
+        "Next month calculated from post date",
+        "Chart analysis image attached - technical analysis basis",
+        "Consolidation suggests neutral-to-slightly-bullish sentiment",
+        "Assumed USD currency"
+    ]
+}
+```
+
+### Ranking
+```json
+{
+    "target_type": "ranking",
+    "extracted_value": {
+        "asset": "PEPE",
+        "ranking": 10,
+        "currency": "USD"
+    },
+    "timeframe": {
+        "explicit": false,
+        "start": null,
+        "end": null
+    },
+    "bear_bull": 65,
+    "notes": [
+        "Market cap ranking assumed",
+        "This cycle is vague timeframe",
+        "Quote tweet disagreeing with @bearish_analyst's bearish prediction",
+        "Frog and diamond emojis indicate strong bullish sentiment",
+        "USD market cap ranking context"
+    ]
+}
+```
+
+### None
+```json
+{
+    "target_type": "none",
+    "timeframe": {
+        "explicit": false,
+        "start": null,
+        "end": null
+    },
+    "bear_bull": -20,
+    "notes": [
+        "No measurable prediction made",
+        "Retweet with additional commentary by @former_crypto_bull",
+        "General market volatility observation only",
+        "Slight negative sentiment due to uncertainty and anti-prediction stance",
+        "Shrugging emoji indicates resignation/uncertainty"
+    ]
+}
+```
+
+---
+
+## 10. Quality Bars
+
+- **Target type classification:**
+    - The parser uses an LLM with a detailed prompt to identify the forecast type. Evaluation is performed by the script `src/evaluation.ts`, which calculates macro accuracy (by category) and confusion matrix. Typical results can be checked in the test output.
+
+- **Exact numeric extraction:**
+    - The system requires exact match for price and range values, with no tolerance. The method `isExactNumericMatch` in `src/evaluation.ts` validates this match. Metrics are reported in the console after running `npm test`.
+
+- **Normalization of time phrases:**
+    - Expressions like "end of Q3" or "next month" are converted to UTC using the post date as reference. The LLM is instructed via prompt and results are evaluated by the evaluation script, which calculates time normalization accuracy.
+
+- **Sentiment (Spearman):**
+    - The `bear_bull` field is extracted by the LLM and compared with the expected value in the tests. Spearman correlation is calculated by the method `spearmanCorrelation` in `src/evaluation.ts` and reported in the test output.
+
+All results can be audited in the output files and in the console after running the evaluation scripts.
+
+---
+
+## 11. Parsing Rules
+
+- **Quotes, replies and reposts:** The parser instructs the LLM to correctly identify and attribute forecasts made in retweets, replies and quotes, adding notes in the `notes` field.
+- **Time normalization:** The `post_created_at` field is always sent to the LLM, which converts relative expressions to UTC. The evaluation script validates the accuracy of these conversions.
+- **Precision vs recall:** The system prioritizes precision: if the LLM does not identify a measurable forecast, it returns `target_type: none` and adds an explanation in `notes`.
+- **Standardized tickers:** The LLM is instructed to accept only recognized tickers, disambiguating via context. Ambiguous cases are treated as `none`.
+- **Modular design:** The parser (`src/parser.ts`) can be easily adapted for other models or rules, as all extraction logic is isolated and the prompt can be adjusted.
+
+---
+
+## 12. Deliverables Checklist
+
+1. **Minimum service:** The endpoint `POST /parse_prediction` is implemented in `src/server.ts`. The README provides usage examples, setup and environment variables.
+2. **Evaluation script:** The script `tests/run-eval.ts` runs the full evaluation, generating metrics and confusion matrix in the console.
+3. **Cost report:** The evaluation script reports latencies (`p50`, `p95`) for batch=1 and batch=16, and counts failures. Check the console output after running the tests.
+4. **File tricky_cases.md:** Automatically generated by the evaluation script, contains difficult examples and detailed explanations for each tricky case.
+
+The core of the system uses a Language Model (LLM) via OpenRouter API to interpret the natural language of posts, classifying them into different forecast types (`target_price`, `pct_change`, `range`, `ranking` or `none`) and extracting numeric values, timeframes and sentiment (bullish/bearish).
+
+The architecture consists of three main components:
+1.  **API Server (`src/server.ts`):** An Express server exposing the `POST /parse_prediction` endpoint.
+2.  **Parsing Module (`src/parser.ts`):** Where the communication logic with the LLM resides, sending the post text and receiving the structured JSON analysis.
+3.  **Evaluation Suite (`src/evaluation.ts` and `tests/`):** A set of scripts and test cases to validate the quality and performance of the parser against the metrics defined in the technical specification.
+
+---
